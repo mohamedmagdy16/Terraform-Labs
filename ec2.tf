@@ -20,8 +20,12 @@ resource "aws_instance" "bastion" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = "t2.micro"
   associate_public_ip_address = true
-  subnet_id                   = aws_subnet.publicsubnet1.id
+  subnet_id                   = module.network.publicsubnet1
   vpc_security_group_ids      = [aws_security_group.allow_ssh.id]
+
+provisioner "local-exec" {
+    command="touch ${self.id}"
+  }
 
 
   tags = {
@@ -44,7 +48,7 @@ resource "aws_key_pair" "generated_key" {
 resource "aws_instance" "app" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.privatesubnet1.id
+  subnet_id              = module.network.privatesubnet1
   vpc_security_group_ids = [aws_security_group.allow_ssh3000.id]
   key_name               = aws_key_pair.generated_key.key_name
 

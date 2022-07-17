@@ -1,6 +1,7 @@
 # Creates and stores ssh key used creating an EC2 instance
 resource "aws_secretsmanager_secret" "secret" {
-  name = "secret"
+  name = "mysecret1"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "smanager" {
